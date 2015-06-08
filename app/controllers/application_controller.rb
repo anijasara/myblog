@@ -1,9 +1,9 @@
 class ApplicationController < ActionController::Base
   before_filter :current_user
 
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :null_session
 
-  helper_method :null_session
+  helper_method :current_user
 
 	private
 
