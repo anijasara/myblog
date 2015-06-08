@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+
+<h1>
+  <%= @post.title %>
+</h1>
+
+<p>
+  <%= @post.description %>
+</p>
+
+<p>
+	 <b><%=raw tag_links(@post.all_tags)%></b>
+</p>
+
+<h2>Comments</h2>
+
+<div id = "addcmnt">
+<% @post.comments.each do |com| %>
+  <p> <%= com.description%><br />
+  <% commented_user = User.find_user(com.commented_by)%>
+    <%=commented_user.name%> : <%= com.created_at.strftime("%d-%b-%y at %l:%M:%S")%><br />
+    <% if @current_user.is_admin? || com.commented_by == @current_user.id%>
+    	<%= link_to 'Destroy', [@post,com], method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
+  </p>
+<% end %>
+  <%= form_for [@post, @post.comments.build] , remote: true do |f| %>
+	  <p>
+        <div class="field">
+	    <%= f.label :body, "Comment Description" %><br />
+	    <%= f.text_area :description %>
+	    <%= f.hidden_field :commented_by, value: @current_user.id%>
+	    </div>
+	  </p>
+	  <p>
+	    <%= f.submit "Add Comment" %>
+	  </p>
+	<% end %>
+</div>
+
+
+<p>
+<% if @current_user.is_admin? || @post.user == @current_user%> 
+	<%= link_to 'Edit', edit_post_path(@post) %>|
+	<%= link_to 'Destroy', @post, method: :delete, data: { confirm: 'Are you sure?' },remote: true %>
+<% end %>
+<%= link_to 'Back', posts_path %>
+</p>

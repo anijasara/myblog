@@ -1,0 +1,29 @@
+<h1>Blog AnyThing..!!</h1>
+
+<p id="notice"><%= notice %></p>
+    <% @posts.each do |post| %>
+    
+      <h2>
+      <%= link_to post.title, post_path(post.to_param) %></h2>
+      <p>
+        <%= post.description %>
+      </p>
+      <p>
+        <%=post.user.name%> - <%= post.created_at.strftime("%d-%b-%y %l:%M:%S")%>
+      </p>
+      <p>
+          <b><%=raw tag_links(post.all_tags)%></b>
+      </p>
+      <%#= link_to 'Show', post %>
+      <%#= link_to 'Edit', edit_post_path(post) %>
+      <%#= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <% end %>
+<br>
+<h4>Tags List</h4>
+  <% tag_cloud Tag.counts, %w{css1 css2 css3 css4} do |tag, css_class| %>
+    <%= link_to tag.name, tag_path(tag.name), class: css_class %>
+  <% end %>
+
+<br>
+
+<%= link_to 'New Post', new_post_path %>
